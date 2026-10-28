@@ -84,11 +84,25 @@ summary.mhead::-webkit-details-marker{display:none}
 .mbody h4{margin:0;font-family:var(--display);font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .res{margin:0;padding-left:18px;display:grid;gap:3px;font-size:.95rem}
 .acts{display:grid;gap:6px}
-.act{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;background:var(--soft);cursor:pointer}
-.act input{margin-top:4px;width:18px;height:18px;accent-color:var(--ok);flex:none}
-.act.done{text-decoration:line-through;color:var(--muted)}
-.act .axp{margin-left:auto;font-family:var(--display);font-weight:700;color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums}
+.act{padding:8px 10px 10px;border-radius:8px;background:var(--soft);display:grid;gap:6px}
+.arow{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.arow input{margin-top:3px;width:18px;height:18px;accent-color:var(--ok);flex:none}
+.arow b{font-weight:600;min-width:0}
+.act.done .arow b{text-decoration:line-through;color:var(--muted)}
+.arow .axp{margin-left:auto;font-family:var(--display);font-weight:700;color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums}
 .act.show{background:color-mix(in srgb,var(--gold) 18%,var(--surface));border:1px solid var(--gold)}
+.how{padding-left:28px;font-size:.93rem;color:var(--fg);display:grid;gap:6px;min-width:0}
+.act.done .how{display:none}
+.how p{margin:0}
+.how code, .stuck code, .obj code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+.how pre{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;overflow-x:auto;font-size:.82rem;line-height:1.45}
+.how pre code{background:none;border:0;padding:0;font-size:inherit}
+.words dl{margin:0;display:grid;gap:4px;font-size:.92rem}
+.words dt{display:inline;font-weight:600}
+.words dd{display:inline;margin:0;color:var(--muted)}
+.words dt::after{content:" : "}
+.stuck{border-left:3px solid var(--red);padding:6px 12px;font-size:.93rem;display:grid;gap:4px}
+.pintro{margin:0 0 4px;color:var(--muted);font-size:.95rem;max-width:65ch}
 .tip{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:.93rem;display:grid;gap:6px}
 .tip code{display:block;white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;background:var(--soft);padding:8px;border-radius:6px}
 .tip .copy{justify-self:start;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:4px 10px;font-size:.85rem;cursor:pointer}
@@ -176,185 +190,397 @@ summary.mhead::-webkit-details-marker{display:none}
 <script>
 const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
 const PHASES = [
- {id:"p0", title:"Mise en place", when:"Semaine 1 · début novembre", deliverable:"Ton premier script qui calcule le classement de Ligue 1", mods:[
+ {id:"p0", title:"Mise en place", when:"Semaine 1 · début novembre", deliverable:"Ton premier script qui calcule le classement de Ligue 1",
+  intro:"Objectif de la semaine : que ton PC soit prêt et que tu aies tapé tes premières lignes de code. Rien à comprendre en profondeur ici, juste installer et vérifier. Lis chaque action en entier avant de la commencer.",
+  mods:[
   {id:"m01", title:"Installer les outils sur ton PC", dur:"45 min",
-   obj:"À la fin : Python, VS Code et Git marchent sur ton PC Windows.",
-   res:[["Python 3 (coche « Add python.exe to PATH » à l'installation)","https://www.python.org/downloads/"],["VS Code","https://code.visualstudio.com/"],["Git pour Windows","https://git-scm.com/download/win"],["Vidéo : installer Python et VS Code sur Windows",YT("installer python vscode windows 2026 français")]],
-   acts:[["Installer Python 3 et vérifier avec `python --version` dans le terminal",10],["Installer VS Code et l'extension « Python »",10],["Installer Git pour Windows",10]],
-   tip:"Je débute. Explique-moi en 5 lignes ce que sont Python, VS Code, Git et le terminal, et à quoi sert chacun."},
+   obj:"À la fin : Python, VS Code et Git marchent sur ton PC Windows, et tu sais ouvrir un terminal.",
+   words:[["Python","le langage dans lequel tu vas écrire tes programmes"],["VS Code","l'éditeur de texte pour écrire du code (comme Word, mais pour le code)"],["Terminal","une fenêtre noire où on tape des commandes au lieu de cliquer"],["Git","l'outil qui garde l'historique de ton code et l'envoie sur GitHub"]],
+   res:[["Télécharger Python (bouton jaune « Download Python 3.x »)","https://www.python.org/downloads/"],["Télécharger VS Code (bouton « Download for Windows »)","https://code.visualstudio.com/"],["Télécharger Git pour Windows (« Click here to download »)","https://git-scm.com/download/win"],["Vidéo : installer Python et VS Code sur Windows (en français)",YT("installer python vs code windows tuto français")]],
+   acts:[
+    ["Installer Python 3",10,"Lance l'installateur téléchargé. Sur le premier écran, coche la case « Add python.exe to PATH » tout en bas (très important), puis clique « Install Now ». Attends la fin, ferme la fenêtre."],
+    ["Vérifier que Python répond dans le terminal",10,"Clique sur le menu Démarrer, tape « powershell », ouvre « Windows PowerShell ». Tape `python --version` et appuie sur Entrée. Tu dois voir quelque chose comme « Python 3.13.2 ». Si tu vois une erreur « python n'est pas reconnu », Python n'a pas été ajouté au PATH : désinstalle-le et recommence l'action 1 en cochant la case."],
+    ["Installer VS Code et l'extension Python",10,"Lance l'installateur, laisse tout par défaut, coche « Ajouter au PATH » si proposé. Ouvre VS Code. À gauche, clique sur l'icône des extensions (4 petits carrés) ou fais Ctrl+Maj+X. Tape « Python », installe celle de Microsoft (la première). Pour passer VS Code en français : Ctrl+Maj+P, tape « display language », choisis « Français »."],
+    ["Installer Git pour Windows",10,"Lance l'installateur. Il y a une dizaine d'écrans : clique « Next » partout, les choix par défaut sont bons. Puis dans PowerShell, tape `git --version` : tu dois voir « git version 2.x »."]
+   ],
+   stuck:"Les erreurs d'installation viennent presque toujours de la case « Add to PATH » oubliée. Si une commande « n'est pas reconnue », ferme et rouvre le terminal : il ne voit les nouveaux programmes qu'au redémarrage.",
+   tip:"Je suis débutant complet sur Windows. Je viens d'installer Python, VS Code et Git. Quand je tape python --version j'obtiens [colle ici le message]. Qu'est-ce que ça veut dire et que dois-je faire ?"},
   {id:"m02", title:"Ton compte GitHub et ton dépôt", dur:"30 min",
-   obj:"Un dépôt « psg-lab » en ligne, avec un premier fichier dedans.",
-   res:[["GitHub","https://github.com/"],["Vidéo : Git et GitHub pour débutants",YT("git github débutant français")]],
-   acts:[["Créer un compte GitHub",10],["Créer le dépôt « psg-lab » et le cloner sur ton PC",15],["Ajouter un fichier README et faire ton premier commit + push",15]],
-   tip:"Donne-moi les 5 commandes git que j'utiliserai tous les soirs (voir ce qui a changé, ajouter, valider, envoyer, récupérer) avec une phrase chacune."},
+   obj:"Un dépôt « psg-lab » en ligne sur GitHub, relié à un dossier sur ton PC. C'est là que vivra tout ton code.",
+   words:[["GitHub","un site qui stocke ton code en ligne et en garde toutes les versions"],["Dépôt (repo)","un projet sur GitHub, en gros un dossier"],["Commit","une sauvegarde datée de ton code avec un petit message"],["Push","envoyer tes commits de ton PC vers GitHub"]],
+   res:[["Créer un compte GitHub","https://github.com/signup"],["Vidéo : Git et GitHub pour débutants (chaîne Graven)",YT("graven git github débutant")],["Vidéo : Git expliqué simplement (chaîne Docstring)",YT("docstring git github")]],
+   acts:[
+    ["Créer ton compte GitHub",10,"Va sur github.com/signup. Choisis un nom d'utilisateur que tu assumes sur un CV (prénom-nom ou proche). Plan gratuit. Confirme ton e-mail."],
+    ["Créer le dépôt « psg-lab »",10,"Connecté sur GitHub, clique sur le « + » en haut à droite → « New repository ». Nom : `psg-lab`. Description : « Mes stats et mon bot PSG ». Laisse « Public ». Coche « Add a README file ». Clique « Create repository »."],
+    ["Récupérer le dépôt sur ton PC",10,"Sur la page du dépôt, clique le bouton vert « Code » et copie l'adresse HTTPS. Dans PowerShell : `cd Documents` puis `git clone ` suivi de l'adresse collée (clic droit pour coller). Entrée. Un dossier `psg-lab` apparaît dans Documents. Tape `cd psg-lab` puis `code .` (avec le point) : VS Code s'ouvre sur ton projet."],
+    ["Ton premier commit",10,"Dans VS Code, ouvre README.md et ajoute une ligne : « Projet démarré le [date] ». Enregistre (Ctrl+S). Ouvre le terminal dans VS Code (menu Terminal → Nouveau terminal, ou Ctrl+ù). Tape ces 3 commandes, une par une : `git add .` puis `git commit -m \"Premier commit\"` puis `git push`. La première fois, Git te demande de te connecter à GitHub : une fenêtre s'ouvre, connecte-toi. Rafraîchis la page GitHub : ta ligne est en ligne."]
+   ],
+   stuck:"Si `git commit` te dit « Please tell me who you are », tape `git config --global user.name \"Ton Nom\"` et `git config --global user.email \"ton@email.com\"` (le même e-mail que GitHub), puis recommence.",
+   tip:"Explique-moi avec des mots simples la différence entre git add, git commit et git push, avec une image du quotidien. Puis donne-moi les 4 commandes que je taperai à la fin de chaque soirée de code."},
   {id:"m03", title:"Un assistant IA pour coder", dur:"30 min",
-   obj:"Un assistant IA installé qui lit ton code et répond à tes questions.",
-   res:[["Claude Code (dans le terminal)","https://docs.claude.com/en/docs/claude-code/overview"],["Cursor (éditeur avec IA intégrée)","https://cursor.com/"],["Vidéo : coder avec une IA quand on débute",YT("claude code débutant tutoriel français")]],
-   acts:[["Installer Claude Code ou Cursor",10],["Lui demander d'expliquer le README de ton dépôt",10],["Lui poser 3 questions sur Python et noter les réponses dans un fichier NOTES.md",10]],
-   tip:"Tu es mon coach. Je veux apprendre Python en faisant des projets foot. Explique chaque chose simplement, et demande-moi de taper le code moi-même plutôt que de tout écrire à ma place."},
+   obj:"Un assistant IA qui voit ton code et répond à tes questions. Tu vas t'en servir à chaque séance : c'est ton prof particulier disponible à 23h.",
+   words:[["Prompt","le message que tu envoies à l'IA"],["Cursor","un éditeur de code (copie de VS Code) avec l'IA intégrée dedans"],["Claude Code","un assistant IA qui tourne dans le terminal et peut lire et modifier tes fichiers"]],
+   res:[["Cursor (le plus simple pour débuter : télécharge, ouvre ton dossier psg-lab, et l'IA est dans le panneau de droite)","https://cursor.com/"],["Claude Code (alternative, dans le terminal)","https://docs.claude.com/fr/docs/claude-code/overview"],["Vidéo : coder avec une IA quand on débute",YT("cursor ia débutant tuto français")]],
+   acts:[
+    ["Installer Cursor (ou Claude Code)",10,"Télécharge Cursor sur cursor.com, installe-le. Au premier lancement, il propose d'importer tes réglages VS Code : accepte. Ouvre ton dossier `Documents/psg-lab` (Fichier → Ouvrir un dossier). Le panneau de chat IA est à droite (Ctrl+L). Le plan gratuit suffit pour démarrer."],
+    ["Lui faire expliquer ton README",10,"Dans le chat, écris : « Explique-moi ce qu'il y a dans ce projet et à quoi sert chaque fichier ». Il doit te parler de ton README et du dossier .git. Si oui, c'est branché."],
+    ["Poser 3 questions et noter les réponses",10,"Crée un fichier `NOTES.md` dans le projet. Demande à l'IA : « C'est quoi une variable ? », « C'est quoi une boucle ? », « C'est quoi un fichier CSV ? ». Recopie l'essentiel en 2 lignes chacune dans NOTES.md, avec tes mots. Commit + push."]
+   ],
+   stuck:"Règle d'or : ne lui demande jamais « fais-moi le programme ». Demande « explique-moi », « montre-moi un exemple », « pourquoi j'ai cette erreur ». Tu dois taper le code toi-même, sinon tu n'apprendras rien et tu seras bloqué dès que l'IA se trompe.",
+   tip:"Tu es mon coach de programmation. Je débute totalement, je suis apprenti en chaudronnerie et fan de foot. Explique-moi chaque chose avec des mots simples et des exemples foot. Ne m'écris jamais un programme complet : donne-moi une étape à la fois et demande-moi de la taper moi-même. Vérifie mon code quand je te le colle."},
   {id:"m04", title:"Premier script : le classement de Ligue 1", dur:"45 min",
-   obj:"Ton code lit les résultats de la saison et affiche le classement.",
-   res:[["Résultats Ligue 1 en CSV (fichier F1.csv)","https://www.football-data.co.uk/francem.php"],["Tutoriel Python officiel (en français)","https://docs.python.org/fr/3/tutorial/"]],
-   acts:[["Télécharger F1.csv et l'ouvrir dans VS Code pour voir les colonnes",10],["Écrire un script qui lit le fichier et compte les points de chaque équipe",30],["Afficher le classement trié et le commiter",20],["Montrer le résultat à quelqu'un (capture d'écran)",40,"show"]],
-   tip:"J'ai un fichier F1.csv avec les colonnes HomeTeam, AwayTeam, FTHG, FTAG. Aide-moi à écrire pas à pas un script Python qui calcule les points de chaque équipe et affiche le classement. Ne me donne pas le code complet d'un coup."}
+   obj:"Un programme écrit par toi qui lit les vrais résultats de la saison et affiche le classement. Ce soir-là, tu es programmeur.",
+   words:[["Script","un fichier .py qui contient un programme"],["CSV","un fichier texte où chaque ligne est un match et les colonnes sont séparées par des virgules ; Excel sait l'ouvrir"],["Variable","une boîte avec un nom où tu ranges une valeur (`points = 3`)"],["print()","afficher quelque chose à l'écran"]],
+   res:[["Résultats Ligue 1 : sur la page, clique « Ligue 1 » sous la saison en cours pour télécharger F1.csv","https://www.football-data.co.uk/francem.php"],["Cours Python en français (Université Paris Cité) — chapitres 1 à 4","https://python.sdv.u-paris.fr/"],["Tutoriel officiel Python en français","https://docs.python.org/fr/3/tutorial/introduction.html"]],
+   acts:[
+    ["Télécharger F1.csv et regarder dedans",10,"Télécharge le fichier et copie-le dans ton dossier `psg-lab`. Ouvre-le dans VS Code : la première ligne donne les noms des colonnes. Repère `HomeTeam` (équipe à domicile), `AwayTeam` (extérieur), `FTHG` (buts domicile), `FTAG` (buts extérieur). Chaque ligne suivante est un match joué."],
+    ["Écrire un script qui lit le fichier",15,"Crée `classement.py`. Tape (sans copier-coller, pour apprendre) :\n```\nimport csv\n\nwith open(\"F1.csv\", encoding=\"utf-8\") as f:\n    matchs = list(csv.DictReader(f))\n\nprint(len(matchs), \"matchs lus\")\nprint(matchs[0])\n```\nLance-le : dans le terminal, `python classement.py`. Tu dois voir le nombre de matchs et le premier match sous forme de dictionnaire."],
+    ["Compter les points de chaque équipe",15,"Ajoute en dessous :\n```\npoints = {}\nfor m in matchs:\n    dom, ext = m[\"HomeTeam\"], m[\"AwayTeam\"]\n    bd, be = int(m[\"FTHG\"]), int(m[\"FTAG\"])\n    points.setdefault(dom, 0)\n    points.setdefault(ext, 0)\n    if bd > be:\n        points[dom] += 3\n    elif bd < be:\n        points[ext] += 3\n    else:\n        points[dom] += 1\n        points[ext] += 1\n```\nRelance. Pas d'erreur ? Demande à ton IA d'expliquer chaque ligne, puis explique-la toi-même à voix haute."],
+    ["Afficher le classement trié et commiter",15,"Ajoute :\n```\nclassement = sorted(points.items(), key=lambda x: x[1], reverse=True)\nfor rang, (equipe, pts) in enumerate(classement, start=1):\n    print(rang, equipe, pts)\n```\nRelance : le classement s'affiche, PSG normalement en haut. `git add .`, `git commit -m \"Classement L1\"`, `git push`."],
+    ["Montrer le résultat à quelqu'un",40,"Capture d'écran du terminal avec le classement, envoyée à ton père ou dans le groupe. Première victoire, officielle.","show"]
+   ],
+   stuck:"« FileNotFoundError » : le terminal n'est pas dans le bon dossier ; tape `cd Documents\\psg-lab` puis relance. « KeyError: 'HomeTeam' » : le fichier a été téléchargé dans un format différent ; ouvre-le et vérifie le nom exact des colonnes. Erreur d'indentation : en Python, les espaces en début de ligne comptent, 4 espaces exactement.",
+   tip:"Voici mon script classement.py et le message d'erreur que j'obtiens : [colle les deux]. Explique-moi ce que signifie l'erreur et guide-moi pour la corriger sans me réécrire tout le code."}
  ]},
- {id:"p1", title:"Stats maison", when:"Novembre · 4 semaines", deliverable:"Un graphique PSG posté à tes potes", mods:[
+ {id:"p1", title:"Stats maison", when:"Novembre · 4 semaines", deliverable:"Un graphique PSG posté à tes potes",
+  intro:"Tu apprends Python en manipulant des résultats de foot. Chaque module ajoute une brique : d'abord les bases du langage, puis pandas (l'outil des données), puis les graphiques. À la fin du mois, tu postes un graphique que tu as fait toi-même.",
+  mods:[
   {id:"m11", title:"Python par le foot : listes, boucles, dictionnaires", dur:"45 min",
-   obj:"Tu sais parcourir des résultats et stocker des stats par équipe.",
-   res:[["Vidéo : Python débutant (chaîne Docstring)",YT("docstring python débutant")],["Tutoriel officiel : structures de données","https://docs.python.org/fr/3/tutorial/datastructures.html"]],
-   acts:[["Calculer buts marqués / encaissés par équipe",20],["Afficher la forme du PSG sur les 5 derniers matchs (V/N/D)",20],["Commit",5]],
-   tip:"Explique-moi listes, boucles for et dictionnaires avec des exemples uniquement sur des résultats de foot."},
+   obj:"Tu comprends vraiment les 3 outils de base que tu as utilisés sans le savoir dans classement.py.",
+   words:[["Liste","une suite de valeurs : `[\"PSG\", \"OM\", \"OL\"]`"],["Boucle for","répéter une action pour chaque élément d'une liste"],["Dictionnaire","des paires clé → valeur : `{\"PSG\": 45, \"OM\": 38}`"],["Condition if","faire quelque chose seulement si c'est vrai"]],
+   res:[["Vidéo : Python pour débutants, chapitres variables / listes / boucles (chaîne Docstring)",YT("docstring apprendre python débutant")],["Cours Python en français — chapitres 4 (listes), 5 (boucles), 6 (tests), 13 (dictionnaires)","https://python.sdv.u-paris.fr/"],["Exercices Python en français pour débutants","https://www.codingame.com/start/fr/"]],
+   acts:[
+    ["Buts marqués et encaissés par équipe",20,"Crée `buts.py`. Reprends la lecture du CSV de classement.py. Crée deux dictionnaires `marques` et `encaisses`. Dans la boucle sur les matchs, ajoute les buts à la bonne équipe (l'équipe à domicile marque FTHG et encaisse FTAG, et inversement). Affiche pour le PSG : « PSG : X buts marqués, Y encaissés ». Vérifie sur le site de la Ligue 1 que les chiffres sont bons."],
+    ["La forme du PSG : les 5 derniers matchs",20,"Toujours dans buts.py : crée une liste vide `forme = []`. Dans la boucle, si le PSG joue le match, ajoute « V », « N » ou « D » à la liste selon le résultat. À la fin, affiche `forme[-5:]` (les 5 derniers). Tu dois voir quelque chose comme `['V', 'V', 'N', 'V', 'D']`. Demande à ton IA ce que veut dire `[-5:]`."],
+    ["Commit",5,"`git add .` → `git commit -m \"Buts et forme\"` → `git push`. Prends l'habitude : chaque soir se termine par un push."]
+   ],
+   stuck:"Si tu as une erreur « TypeError: can only concatenate str », tu additionnes un texte avec un nombre : les valeurs du CSV sont des textes, il faut les convertir avec `int(...)`.",
+   tip:"Explique-moi les listes, les boucles for et les dictionnaires en Python avec uniquement des exemples de foot (équipes, buts, classement). Puis donne-moi 3 petits exercices à faire sur mon fichier F1.csv, sans les solutions."},
   {id:"m12", title:"pandas : la feuille Excel du codeur", dur:"45 min",
-   obj:"Tu charges un CSV en une ligne et tu groupes par équipe.",
-   res:[["pandas : prise en main 10 minutes","https://pandas.pydata.org/docs/user_guide/10min.html"],["Vidéo : pandas débutant",YT("pandas python débutant français")]],
-   acts:[["Installer pandas (`pip install pandas`) et charger F1.csv",15],["Refaire le classement en 10 lignes avec groupby",25],["Commit",5]],
-   tip:"Montre-moi comment refaire mon classement de Ligue 1 avec pandas en expliquant chaque ligne."},
+   obj:"Tu refais le classement en 10 lignes au lieu de 30, et tu comprends pourquoi tout le monde utilise pandas pour les données.",
+   words:[["pandas","une bibliothèque (boîte à outils) Python pour manipuler des tableaux de données"],["pip","la commande qui installe des bibliothèques"],["DataFrame","un tableau pandas : des lignes et des colonnes, comme une feuille Excel"],["groupby","regrouper les lignes par valeur (par équipe, par exemple) pour faire des totaux"]],
+   res:[["Vidéo : pandas pour débutants (en français)",YT("pandas python débutant tuto français")],["pandas : prise en main (anglais, mais très visuel)","https://pandas.pydata.org/docs/user_guide/10min.html"],["Cours pandas en français","https://python.sdv.u-paris.fr/20_module_pandas/"]],
+   acts:[
+    ["Installer pandas et charger F1.csv",15,"Dans le terminal : `pip install pandas`. Crée `stats.py` :\n```\nimport pandas as pd\n\nmatchs = pd.read_csv(\"F1.csv\")\nprint(matchs.shape)\nprint(matchs[[\"Date\", \"HomeTeam\", \"AwayTeam\", \"FTHG\", \"FTAG\"]].head())\n```\nLance : tu vois le nombre de lignes/colonnes et les 5 premiers matchs, proprement alignés."],
+    ["Refaire le classement avec pandas",25,"Ajoute des colonnes de points :\n```\nmatchs[\"pts_dom\"] = matchs.apply(lambda m: 3 if m.FTHG > m.FTAG else (1 if m.FTHG == m.FTAG else 0), axis=1)\nmatchs[\"pts_ext\"] = matchs.apply(lambda m: 3 if m.FTAG > m.FTHG else (1 if m.FTHG == m.FTAG else 0), axis=1)\ndom = matchs.groupby(\"HomeTeam\")[\"pts_dom\"].sum()\next = matchs.groupby(\"AwayTeam\")[\"pts_ext\"].sum()\nclassement = (dom + ext).sort_values(ascending=False)\nprint(classement)\n```\nCompare avec classement.py : mêmes chiffres ? Demande à ton IA d'expliquer `apply`, `lambda` et `groupby` une par une."],
+    ["Commit",5,"`git add .` → `git commit -m \"Classement pandas\"` → `git push`."]
+   ],
+   stuck:"« ModuleNotFoundError: No module named 'pandas' » : l'installation n'a pas marché ou tu as plusieurs Python. Essaie `python -m pip install pandas`.",
+   tip:"Voici mon classement avec pandas : [colle le code]. Explique-moi ligne par ligne ce que font apply, lambda, groupby et sort_values, comme si j'avais 15 ans."},
   {id:"m13", title:"Ton premier graphique", dur:"45 min",
-   obj:"Une courbe des points du PSG journée par journée, face à ses concurrents.",
-   res:[["plotly (graphiques interactifs)","https://plotly.com/python/"],["matplotlib (graphiques simples)","https://matplotlib.org/stable/tutorials/index.html"]],
-   acts:[["Tracer les points cumulés du PSG par journée",25],["Ajouter 2 concurrents sur le même graphique",15],["Exporter en image et commit",10]],
-   tip:"J'ai un DataFrame pandas des matchs de Ligue 1. Aide-moi à tracer les points cumulés du PSG par journée avec plotly, puis à ajouter Marseille et Monaco."},
+   obj:"Une courbe des points du PSG journée par journée, face à ses concurrents. Ton premier truc « postable ».",
+   words:[["plotly","une bibliothèque qui dessine des graphiques interactifs (on peut zoomer, survoler)"],["Courbe cumulée","à chaque journée, le total de points depuis le début de saison"]],
+   res:[["Vidéo : graphiques avec plotly en Python (français)",YT("plotly python tuto français")],["Galerie plotly : courbes (line charts)","https://plotly.com/python/line-charts/"]],
+   acts:[
+    ["Les points cumulés du PSG par journée",25,"`pip install plotly`. Crée `courbe.py`. Charge F1.csv avec pandas. Garde seulement les matchs du PSG : `psg = matchs[(matchs.HomeTeam == \"Paris SG\") | (matchs.AwayTeam == \"Paris SG\")]` (vérifie l'orthographe exacte du nom dans le CSV). Calcule les points du PSG à chaque match (3/1/0) dans une colonne `pts`, puis `psg[\"cumul\"] = psg.pts.cumsum()`. Trace :\n```\nimport plotly.express as px\nfig = px.line(psg, x=\"Date\", y=\"cumul\", title=\"Points du PSG\")\nfig.show()\n```\nUne fenêtre de navigateur s'ouvre avec ta courbe."],
+    ["Ajouter deux concurrents",15,"Transforme ton code en fonction `points_cumules(equipe)` qui renvoie le tableau pour n'importe quelle équipe. Appelle-la pour Paris SG, Marseille et Monaco, mets les 3 résultats bout à bout avec `pd.concat` en ajoutant une colonne `equipe`, et trace avec `color=\"equipe\"`. Trois courbes sur le même graphique."],
+    ["Exporter en image et commiter",10,"`pip install kaleido` puis `fig.write_image(\"courbe.png\")`. Le fichier PNG apparaît dans ton dossier. Commit + push (le PNG aussi)."]
+   ],
+   stuck:"Si `fig.show()` n'ouvre rien, remplace par `fig.write_html(\"courbe.html\")` et ouvre le fichier avec ton navigateur.",
+   tip:"Aide-moi à écrire une fonction Python points_cumules(equipe) qui, à partir de mon DataFrame des matchs de Ligue 1, renvoie un tableau avec la date et les points cumulés de cette équipe. Explique chaque étape, je tape moi-même."},
   {id:"m14", title:"xG : les buts attendus", dur:"45 min",
-   obj:"Tu comprends ce qu'est le xG et tu compares buts réels et buts attendus.",
-   res:[["Stats Ligue 1 sur FBref (bouton « Share & Export » → CSV)","https://fbref.com/en/comps/13/Ligue-1-Stats"],["Vidéo : le xG expliqué",YT("expected goals xg expliqué français")]],
-   acts:[["Exporter le tableau xG de Ligue 1 depuis FBref",10],["Graphique buts vs xG par équipe (qui surperforme ?)",30],["Écrire 3 phrases d'analyse dans NOTES.md et commit",10]],
-   tip:"Explique-moi le xG comme à un fan de foot qui n'a jamais fait de stats, puis aide-moi à tracer buts réels vs xG pour les 18 équipes de Ligue 1."},
+   obj:"Tu comprends le xG (la stat dont tout le monde parle) et tu vois quelles équipes ont de la chance ou n'en ont pas.",
+   words:[["xG (expected goals)","la probabilité qu'un tir finisse au fond, selon sa position et sa situation ; la somme des xG d'un match, c'est le nombre de buts « mérités »"],["Surperformer","marquer plus que son xG (bon finisseur, ou chance)"]],
+   res:[["Vidéo : le xG expliqué simplement (en français)",YT("expected goals xg c'est quoi expliqué français")],["Stats Ligue 1 sur FBref — tableau « Squad Standard Stats », bouton « Share & Export » → « Get table as CSV »","https://fbref.com/en/comps/13/Ligue-1-Stats"]],
+   acts:[
+    ["Exporter le tableau xG depuis FBref",10,"Sur la page FBref, descends jusqu'au tableau des stats d'équipes. Au-dessus du tableau : « Share & Export » → « Get table as CSV ». Copie tout le texte qui s'affiche, colle-le dans un nouveau fichier `xg.csv` dans VS Code. Ouvre-le avec pandas : `pd.read_csv(\"xg.csv\", header=1)` (le `header=1` saute la première ligne de titres). Affiche les colonnes `Squad`, `GF` (buts) et `xG`."],
+    ["Graphique buts vs xG",30,"Un nuage de points : `px.scatter(df, x=\"xG\", y=\"GF\", text=\"Squad\", title=\"Buts marqués vs buts attendus\")`. Ajoute la ligne « buts = xG » (la diagonale) avec `fig.add_shape(type=\"line\", x0=0, y0=0, x1=60, y1=60)`. Les équipes au-dessus de la ligne marquent plus que prévu. Où est le PSG ?"],
+    ["3 phrases d'analyse",10,"Dans NOTES.md, écris 3 phrases : quelle équipe surperforme le plus, laquelle sous-performe, et une chose qui t'a surpris. Commit + push."]
+   ],
+   stuck:"FBref change parfois le format de ses tableaux : si `header=1` ne marche pas, ouvre xg.csv et compte sur quelle ligne sont les vrais noms de colonnes.",
+   tip:"Explique-moi le xG comme à un fan de foot qui n'a jamais fait de stats, avec un exemple de match du PSG. Puis dis-moi comment interpréter un nuage de points buts vs xG."},
   {id:"m15", title:"Comparer deux joueurs du PSG", dur:"45 min",
-   obj:"Un graphique radar qui compare deux joueurs sur 6 stats.",
-   res:[["Stats joueurs PSG sur FBref","https://fbref.com/en/squads/e2d8892c/Paris-Saint-Germain-Stats"],["Graphique radar avec plotly","https://plotly.com/python/radar-chart/"]],
-   acts:[["Choisir 2 joueurs et 6 stats (tirs, passes clés, dribbles…)",10],["Tracer le radar",30],["Commit",5]],
-   tip:"Aide-moi à faire un graphique radar plotly comparant deux joueurs à partir d'un CSV FBref, avec les stats normalisées par 90 minutes."},
+   obj:"Un graphique radar (une toile d'araignée) qui compare deux joueurs sur 6 stats. Le genre de visuel qui fait débat dans un groupe.",
+   words:[["Radar","un graphique en toile d'araignée, un axe par stat"],["Par 90 minutes","ramener une stat au temps de jeu, pour comparer un titulaire et un remplaçant"],["Normaliser","mettre toutes les stats sur la même échelle (0 à 1 ou 0 à 100)"]],
+   res:[["Stats des joueurs du PSG sur FBref (tableau « Standard Stats », export CSV comme au module précédent)","https://fbref.com/en/squads/e2d8892c/Paris-Saint-Germain-Stats"],["Exemple de radar avec plotly","https://plotly.com/python/radar-chart/"]],
+   acts:[
+    ["Choisir 2 joueurs et 6 stats",10,"Exporte le tableau des joueurs en `joueurs.csv`. Choisis deux joueurs que tes potes comparent souvent. Choisis 6 colonnes « par 90 » (elles finissent par `.1` ou sont dans la section « Per 90 Minutes ») : buts, passes décisives, xG, xA, tirs, passes progressives par exemple."],
+    ["Tracer le radar",30,"Pour chaque stat, divise la valeur par le maximum des deux joueurs (normalisation). Puis :\n```\nimport plotly.graph_objects as go\nfig = go.Figure()\nfig.add_trace(go.Scatterpolar(r=valeurs_j1, theta=stats, fill=\"toself\", name=j1))\nfig.add_trace(go.Scatterpolar(r=valeurs_j2, theta=stats, fill=\"toself\", name=j2))\nfig.show()\n```\nDemande à ton IA de t'aider à construire `valeurs_j1` et `valeurs_j2` à partir du DataFrame."],
+    ["Commit",5,"Commit + push avec l'image exportée."]
+   ],
+   stuck:"Les noms de colonnes FBref sont parfois en double (Gls, Gls.1) : affiche `list(df.columns)` pour voir les vrais noms.",
+   tip:"J'ai un CSV FBref des joueurs du PSG. Aide-moi, étape par étape, à sélectionner deux joueurs, 6 stats par 90 minutes, les normaliser et les tracer dans un radar plotly."},
   {id:"m16", title:"Mini tableau de bord", dur:"2 séances",
-   obj:"Une page web locale avec tes 3 graphiques, mise à jour après chaque journée.",
-   res:[["Streamlit (une appli web en Python)","https://docs.streamlit.io/get-started"],["Vidéo : Streamlit en 20 minutes",YT("streamlit tutoriel français")]],
-   acts:[["Installer Streamlit et afficher le classement",30],["Ajouter les 3 graphiques dans des onglets",40],["Commit",5]],
-   tip:"Aide-moi à transformer mes scripts en une appli Streamlit avec 3 onglets : classement, courbe des points, radar joueurs."},
+   obj:"Une vraie page web sur ton PC avec tes 3 graphiques, que tu mets à jour en 10 secondes après chaque journée.",
+   words:[["Streamlit","une bibliothèque qui transforme un script Python en page web, sans savoir faire de site web"],["Onglet","une section de la page qu'on affiche en cliquant"]],
+   res:[["Vidéo : Streamlit en 20 minutes (en français)",YT("streamlit python tuto français débutant")],["Streamlit : premiers pas (anglais)","https://docs.streamlit.io/get-started"]],
+   acts:[
+    ["Installer Streamlit et afficher le classement",30,"`pip install streamlit`. Crée `app.py` :\n```\nimport streamlit as st\nimport pandas as pd\n\nst.title(\"PSG Lab\")\nmatchs = pd.read_csv(\"F1.csv\")\nst.write(\"Matchs joués :\", len(matchs))\n```\nLance avec `streamlit run app.py` : ton navigateur s'ouvre sur ta page. Ajoute le calcul du classement (copie de stats.py) et affiche-le avec `st.dataframe(classement)`."],
+    ["Trois onglets, trois graphiques",40,"`onglet1, onglet2, onglet3 = st.tabs([\"Classement\", \"Courbe\", \"Radar\"])`. Dans chaque `with onglet:`, mets le bon graphique avec `st.plotly_chart(fig)`. Range tes calculs dans des fonctions pour que app.py reste lisible. Ajoute un bouton « Mettre à jour » qui recharge F1.csv."],
+    ["Commit",5,"Commit + push. Ajoute dans le README : « Lancer avec streamlit run app.py »."]
+   ],
+   stuck:"Si la page reste blanche, regarde le terminal : l'erreur Python s'affiche là, pas dans le navigateur.",
+   tip:"Aide-moi à organiser mon app.py Streamlit en 3 onglets (classement, courbe des points, radar joueurs) en réutilisant mes scripts existants. Montre-moi comment découper en fonctions."},
   {id:"m17", title:"Livrable : poster un graphique aux potes", dur:"15 min",
-   obj:"Un graphique que tu assumes, posté dans le groupe. C'est le vrai test.",
-   res:[],
-   acts:[["Choisir ton meilleur graphique et le soigner (titre, légende, couleurs)",20],["Le poster dans le groupe de potes",100,"show"]],
-   tip:"Voici mon graphique (je décris). Donne-moi 3 améliorations simples pour qu'il soit lisible sur un téléphone."}
+   obj:"Un graphique que tu assumes, posté dans le groupe. C'est le vrai test : pas pour ton père, pour tes potes.",
+   words:[],
+   res:[["Guide : rendre un graphique lisible (titre, axes, couleurs)",YT("rendre un graphique lisible bonnes pratiques dataviz")]],
+   acts:[
+    ["Soigner ton meilleur graphique",20,"Choisis le plus parlant (souvent la courbe à 3 équipes ou le xG). Vérifie : un titre qui dit quelque chose (« Le PSG creuse l'écart depuis la 8e journée »), des axes nommés, des couleurs lisibles sur téléphone, la source en petit (« données : football-data.co.uk »). Exporte en PNG."],
+    ["Le poster dans le groupe",100,"Poste-le avec une phrase, sans dire que c'est toi qui l'as fait… puis dis-le quand ils réagissent. Note les réactions dans NOTES.md. Badge « Graphiste » débloqué.","show"]
+   ],
+   stuck:"Si personne ne réagit, ce n'est pas grave : poste-en un deuxième le soir d'un match. Le bon moment compte autant que le graphique.",
+   tip:"Voici mon graphique (je te décris ce qu'il montre). Donne-moi 3 améliorations simples pour qu'il soit lisible sur un téléphone et accrocheur dans un groupe de fans."}
  ]},
- {id:"p2", title:"Le bot PSG", when:"Décembre – janvier · 6 à 8 semaines", deliverable:"Le bot tourne dans le groupe une semaine sans toi", mods:[
+ {id:"p2", title:"Le bot PSG", when:"Décembre – janvier · 6 à 8 semaines", deliverable:"Le bot tourne dans le groupe une semaine sans toi",
+  intro:"Ton code sort de ton PC et vit dans le groupe. Un bot, c'est un programme qui lit les messages d'un salon et y répond. Tu vas lui apprendre, commande par commande, à parler du PSG. En parallèle, si tu veux un défi quotidien en décembre : Advent of Code, un petit puzzle par jour.",
+  mods:[
   {id:"m21", title:"Créer le bot sur Discord", dur:"30 min",
-   obj:"Un bot existe, invité dans un serveur de test.",
-   res:[["Discord Developer Portal","https://discord.com/developers/applications"],["Vidéo : créer un bot Discord en Python (chaîne Graven)",YT("graven bot discord python")]],
-   acts:[["Créer l'application et le bot, récupérer le token (ne jamais le mettre sur GitHub)",15],["L'inviter dans un serveur de test à toi",10]],
-   tip:"Explique-moi ce qu'est un token de bot Discord, pourquoi il ne doit jamais être dans mon dépôt GitHub, et comment le stocker dans un fichier .env."},
+   obj:"Un bot existe sur Discord, avec son nom et son avatar, invité dans un serveur de test à toi.",
+   words:[["Bot","un compte Discord piloté par un programme au lieu d'une personne"],["Token","le mot de passe secret du bot ; qui l'a peut contrôler le bot"],["Serveur Discord","un espace avec des salons, comme un groupe"],["Fichier .env","un fichier où on range les secrets, jamais envoyé sur GitHub"]],
+   res:[["Portail développeur Discord","https://discord.com/developers/applications"],["Vidéo : créer un bot Discord en Python, partie 1 (chaîne Graven, en français)",YT("graven créer bot discord python")]],
+   acts:[
+    ["Créer un serveur de test",5,"Dans Discord, « + » en bas de la liste des serveurs → « Créer le mien » → nom « Labo PSG ». C'est ton bac à sable, le vrai groupe viendra plus tard."],
+    ["Créer l'application et le bot",10,"Sur le portail développeur : « New Application », nom « PSG Bot ». Menu « Bot » à gauche : « Reset Token » → copie le token tout de suite (il ne s'affiche qu'une fois). Dans la même page, active « Message Content Intent » (sinon le bot ne lira pas les messages)."],
+    ["Mettre le token à l'abri",5,"Dans psg-lab, crée un fichier `.env` avec une ligne : `DISCORD_TOKEN=colle_ton_token_ici`. Crée un fichier `.gitignore` avec une ligne : `.env`. Ça interdit à Git d'envoyer ce fichier sur GitHub. Vérifie avec `git status` : `.env` ne doit pas apparaître."],
+    ["Inviter le bot dans ton serveur",10,"Menu « OAuth2 » → « URL Generator » : coche `bot`, puis en dessous `Send Messages` et `Read Message History`. Copie l'URL générée, ouvre-la dans ton navigateur, choisis « Labo PSG ». Le bot apparaît dans la liste des membres, hors ligne (normal : rien ne tourne encore)."]
+   ],
+   stuck:"Si tu as collé le token quelque part de public (GitHub, Discord), reviens sur le portail et fais « Reset Token » : l'ancien ne marche plus.",
+   tip:"Explique-moi ce qu'est un token de bot Discord, pourquoi il ne doit jamais être dans mon dépôt GitHub, et comment le charger depuis un fichier .env en Python avec python-dotenv."},
   {id:"m22", title:"Ping / pong", dur:"45 min",
-   obj:"Le bot répond à ta première commande.",
-   res:[["discord.py : démarrage rapide","https://discordpy.readthedocs.io/en/stable/quickstart.html"]],
-   acts:[["Installer discord.py et lancer le bot",20],["Commande `!ping` → « pong »",15],["Commande `!psg` → une phrase au hasard sur le PSG",15]],
-   tip:"Aide-moi à écrire un bot discord.py minimal qui répond pong à !ping. Explique chaque ligne."},
+   obj:"Le bot est en ligne et répond à ta première commande. Le moment où ça devient réel.",
+   words:[["discord.py","la bibliothèque Python pour faire des bots Discord"],["Commande","un message qui commence par un symbole (`!ping`) et que le bot reconnaît"],["Événement","quelque chose qui se passe (un message arrive) et déclenche du code"]],
+   res:[["discord.py : démarrage rapide (anglais, court)","https://discordpy.readthedocs.io/en/stable/quickstart.html"],["Vidéo : bot Discord Python, partie 2 — premières commandes (Graven)",YT("graven bot discord python commandes")]],
+   acts:[
+    ["Installer et lancer le bot",20,"`pip install discord.py python-dotenv`. Crée `bot.py` :\n```\nimport os, discord\nfrom discord.ext import commands\nfrom dotenv import load_dotenv\n\nload_dotenv()\nintents = discord.Intents.default()\nintents.message_content = True\nbot = commands.Bot(command_prefix=\"!\", intents=intents)\n\n@bot.event\nasync def on_ready():\n    print(\"Connecté :\", bot.user)\n\nbot.run(os.getenv(\"DISCORD_TOKEN\"))\n```\n`python bot.py` : le terminal affiche « Connecté : PSG Bot » et le bot passe en ligne dans Discord."],
+    ["La commande !ping",15,"Avant `bot.run`, ajoute :\n```\n@bot.command()\nasync def ping(ctx):\n    await ctx.send(\"pong\")\n```\nRelance le bot (Ctrl+C pour l'arrêter, puis `python bot.py`). Dans Discord, tape `!ping`. Il répond « pong ». Demande à ton IA ce que veulent dire `async` et `await` (réponse courte : « ça attend sans bloquer »)."],
+    ["La commande !psg",15,"Une liste de 5 phrases sur le PSG (`import random`, `random.choice(liste)`). `!psg` en envoie une au hasard. Commit + push (vérifie encore que `.env` n'y est pas)."]
+   ],
+   stuck:"Bot hors ligne et erreur « Improper token » : le token dans .env est faux ou a un espace en trop. « PrivilegedIntentsRequired » : tu as oublié d'activer Message Content Intent sur le portail.",
+   tip:"Mon bot discord.py ne répond pas à !ping alors qu'il est en ligne. Voici mon code : [colle]. Quelles sont les 3 causes les plus probables et comment vérifier chacune ?"},
   {id:"m23", title:"Prochain match du PSG", dur:"45 min",
-   obj:"`!prochain` affiche adversaire, date et compétition, depuis une vraie API.",
-   res:[["football-data.org (clé gratuite, Ligue 1 incluse)","https://www.football-data.org/client/register"],["Doc de l'API","https://www.football-data.org/documentation/quickstart"]],
-   acts:[["Créer ta clé API et tester un appel dans un script",20],["Commande `!prochain`",25],["Commit",5]],
-   tip:"J'ai une clé football-data.org. Montre-moi comment récupérer le prochain match du PSG avec requests, puis l'afficher proprement dans Discord."},
+   obj:"`!prochain` répond avec l'adversaire, la date et la compétition, en allant chercher l'info sur une vraie API.",
+   words:[["API","un site fait pour les programmes : tu lui demandes une info, il te répond en données (pas en page web)"],["Clé API","ton identifiant pour utiliser l'API"],["JSON","le format des réponses d'une API, qui ressemble à un dictionnaire Python"],["requests","la bibliothèque Python pour parler à une API"]],
+   res:[["football-data.org : créer une clé gratuite (la Ligue 1 est incluse)","https://www.football-data.org/client/register"],["Doc de démarrage de l'API (anglais, court)","https://www.football-data.org/documentation/quickstart"],["Vidéo : utiliser une API avec Python requests (français)",YT("api python requests tuto français débutant")]],
+   acts:[
+    ["Créer ta clé et faire un premier appel",20,"Inscris-toi, la clé arrive par e-mail. Ajoute-la dans `.env` : `FOOTBALL_TOKEN=...`. Crée `api_test.py` :\n```\nimport os, requests\nfrom dotenv import load_dotenv\nload_dotenv()\nr = requests.get(\"https://api.football-data.org/v4/teams/524/matches?status=SCHEDULED&limit=1\",\n                 headers={\"X-Auth-Token\": os.getenv(\"FOOTBALL_TOKEN\")})\nprint(r.json())\n```\n(524 est l'identifiant du PSG.) Tu obtiens un gros dictionnaire : repère `homeTeam`, `awayTeam`, `utcDate`, `competition`."],
+    ["La commande !prochain",25,"Dans bot.py, une fonction `prochain_match()` qui fait l'appel et renvoie une phrase : « Prochain match : PSG – Lyon, samedi 6 déc. 21h00 (Ligue 1) ». Convertis la date UTC en heure française avec `datetime` et `zoneinfo` (demande à ton IA). Ajoute la commande `!prochain` qui envoie cette phrase."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"Réponse `{'message': 'The resource you are looking for is restricted'}` : la clé est absente ou mal passée dans l'en-tête X-Auth-Token. L'offre gratuite limite à 10 appels par minute : si tu spammes, attends une minute.",
+   tip:"Voici la réponse JSON de l'API football-data.org pour le prochain match du PSG : [colle]. Aide-moi à en extraire l'adversaire, la date en heure française et la compétition, puis à construire une phrase propre."},
   {id:"m24", title:"Dernier résultat et classement", dur:"45 min",
-   obj:"`!dernier` et `!classement` répondent avec les données du jour.",
-   res:[],
-   acts:[["Commande `!dernier` (score, buteurs si dispo)",25],["Commande `!classement` (top 5 + position du PSG)",20],["Commit",5]],
-   tip:"Aide-moi à formater un classement de Ligue 1 dans un message Discord lisible sur téléphone (embed ou bloc de code)."},
+   obj:"`!dernier` et `!classement` répondent avec les données du jour. Le bot devient utile.",
+   words:[["Embed","un message Discord mis en forme (cadre coloré, titre, champs)"],["Bloc de code","du texte à largeur fixe dans Discord, pratique pour aligner un tableau"]],
+   res:[["Doc de l'API : classements (standings)","https://www.football-data.org/documentation/quickstart"],["Les embeds dans discord.py",YT("discord.py embed tuto français")]],
+   acts:[
+    ["La commande !dernier",25,"Même appel que !prochain mais avec `status=FINISHED&limit=1`. Extrais le score (`score.fullTime.home` / `away`). Réponse : « Dernier match : PSG 3–1 Lyon (Ligue 1, 29 nov.) »."],
+    ["La commande !classement",20,"Appel `https://api.football-data.org/v4/competitions/FL1/standings`. Parcours `standings[0][\"table\"]` : position, nom d'équipe, points. Affiche le top 5 plus la ligne du PSG dans un bloc de code (entre trois accents graves) pour que ce soit aligné sur téléphone."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"Les noms d'équipes de l'API sont en anglais ou longs (« Paris Saint-Germain FC ») : utilise `shortName` ou `tla` (le trigramme) pour un affichage compact.",
+   tip:"Aide-moi à afficher un classement de Ligue 1 (top 5 + PSG) dans un message Discord lisible sur téléphone, avec les colonnes alignées."},
   {id:"m25", title:"Stats du match", dur:"45 min",
-   obj:"Après un match, `!stats` donne possession, tirs, xG.",
-   res:[["Rapport de match FBref (exemple de page)","https://fbref.com/en/squads/e2d8892c/Paris-Saint-Germain-Stats"]],
-   acts:[["Trouver où récupérer les stats d'un match (API ou export)",20],["Commande `!stats`",25],["Commit",5]],
-   tip:"Quelles sont mes options gratuites pour avoir les stats d'un match de Ligue 1 (possession, tirs, xG) depuis Python ? Compare-les en 5 lignes."},
+   obj:"Après un match, `!stats` donne possession, tirs et xG. La commande qui fait de toi « le mec des stats » du groupe.",
+   words:[["Scraping","lire une page web avec un programme pour en extraire des données (à faire avec modération, les sites n'aiment pas être harcelés)"]],
+   res:[["Page des matchs du PSG sur FBref (chaque match a un rapport avec les stats)","https://fbref.com/en/squads/e2d8892c/Paris-Saint-Germain-Stats"],["Vidéo : lire un tableau web avec pandas (read_html)",YT("pandas read_html tuto français")]],
+   acts:[
+    ["Trouver où récupérer les stats d'un match",20,"L'API gratuite ne donne pas la possession ni le xG. Deux options : (a) `pd.read_html(url)` sur la page FBref du match (demande à ton IA comment trouver l'URL du dernier match) ; (b) saisir les stats à la main dans un petit fichier `stats_match.json` après chaque match. Commence par (b) : ça marche à coup sûr, et tu passeras à (a) ensuite."],
+    ["La commande !stats",25,"Le bot lit `stats_match.json` (possession, tirs, tirs cadrés, xG des deux équipes) et répond en embed avec un champ par stat. Mets à jour le fichier après le prochain match du PSG, en direct, pour tester avec le groupe."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"FBref bloque les programmes trop insistants : un seul appel par match, et garde le résultat dans un fichier pour ne pas redemander.",
+   tip:"Quelles sont mes options gratuites pour obtenir les stats d'un match de Ligue 1 (possession, tirs, xG) depuis Python ? Compare-les en 5 lignes avec leurs limites, et dis-moi par laquelle commencer en débutant."},
   {id:"m26", title:"Résumé écrit par l'IA", dur:"45 min",
-   obj:"Le bot écrit un résumé de 5 lignes du match, dans le ton de ton groupe.",
-   res:[["API Claude : premier appel","https://docs.claude.com/en/docs/get-started"],["Vidéo : appeler une API d'IA depuis Python",YT("api claude python tutoriel")]],
-   acts:[["Créer une clé API et faire un premier appel (quelques centimes)",20],["Commande `!resume` qui envoie les stats du match à l'IA et poste le texte",30],["Commit",5]],
-   tip:"Aide-moi à écrire un prompt pour que l'IA résume un match du PSG en 5 lignes, ton fan mais honnête, à partir du score et des stats que je lui donne."},
+   obj:"Le bot écrit un résumé de 5 lignes du match, dans le ton de ton groupe. Ta première utilisation de l'IA dans un programme.",
+   words:[["Modèle de langage (LLM)","une IA qui écrit du texte à partir d'un message (Claude, ChatGPT…)"],["API d'IA","appeler cette IA depuis ton programme, payant à l'usage (quelques centimes par résumé)"]],
+   res:[["API Claude : premier appel en Python","https://docs.claude.com/fr/docs/get-started"],["Vidéo : appeler une API d'IA depuis Python (français)",YT("api claude python tuto français")]],
+   acts:[
+    ["Créer une clé et faire un premier appel",20,"Crée un compte développeur sur console.anthropic.com, ajoute 5 € de crédit (largement assez pour la saison), génère une clé, mets-la dans `.env` : `ANTHROPIC_API_KEY=...`. `pip install anthropic`. Dans un script de test, envoie « Dis bonjour en 3 mots » et affiche la réponse (le code exact est dans la doc, section Python)."],
+    ["La commande !resume",30,"Construis un message pour l'IA : « Tu écris pour un groupe de fans du PSG. Résume ce match en 5 lignes, ton fan mais honnête, sans inventer : [score, buteurs, stats du fichier] ». La commande `!resume` envoie ça à l'API et poste la réponse. Teste sur le dernier match et ajuste le ton jusqu'à ce que ça sonne comme vous."],
+    ["Commit",5,"Commit + push (sans la clé, évidemment)."]
+   ],
+   stuck:"Si l'IA invente des buteurs ou des faits, c'est que tu ne lui donnes pas assez de données : mets explicitement « n'invente rien, utilise uniquement ces informations ».",
+   tip:"Aide-moi à écrire un prompt pour que l'IA résume un match du PSG en 5 lignes à partir du score, des buteurs et des stats que je lui donne, sans rien inventer, dans un ton fan mais honnête."},
   {id:"m27", title:"Le bot tourne 24h/24", dur:"45 min",
-   obj:"Ton PC est éteint, le bot répond quand même.",
-   res:[["Railway (hébergement, offre gratuite)","https://railway.com/"],["Render","https://render.com/"],["Vidéo : héberger un bot Discord gratuitement",YT("héberger bot discord python gratuit railway")]],
-   acts:[["Déployer le bot sur Railway ou Render",40],["Vérifier qu'il répond PC éteint",20],["Commit (sans le token !)",5]],
-   tip:"Explique-moi étape par étape comment déployer mon bot discord.py sur Railway, avec le token en variable d'environnement."},
+   obj:"Ton PC est éteint, le bot répond quand même. Il devient un service, plus un script.",
+   words:[["Héberger","faire tourner ton programme sur un ordinateur en ligne (un serveur) au lieu du tien"],["Déployer","envoyer ton code sur ce serveur et le lancer"],["Variable d'environnement","un secret (ton token) que tu donnes au serveur dans ses réglages, pas dans le code"]],
+   res:[["Railway (offre d'essai gratuite, puis quelques euros par mois)","https://railway.com/"],["Render (offre gratuite, le bot peut s'endormir)","https://render.com/"],["Vidéo : héberger un bot Discord Python gratuitement (français)",YT("héberger bot discord python gratuit tuto français")]],
+   acts:[
+    ["Préparer le projet",10,"Crée `requirements.txt` avec une ligne par bibliothèque : `discord.py`, `python-dotenv`, `requests`, `anthropic`. Crée `Procfile` (sans extension) avec : `worker: python bot.py`. Commit + push."],
+    ["Déployer sur Railway",30,"Compte Railway avec ton compte GitHub. « New Project » → « Deploy from GitHub repo » → psg-lab. Dans « Variables », ajoute DISCORD_TOKEN, FOOTBALL_TOKEN, ANTHROPIC_API_KEY avec leurs valeurs. Railway installe et lance. Onglet « Logs » : tu dois voir « Connecté : PSG Bot »."],
+    ["Vérifier PC éteint",20,"Éteins ton PC. Depuis ton téléphone, tape `!ping` dans Discord. Pong ? Badge « Bot en ligne ». À partir de maintenant, chaque `git push` redéploie le bot tout seul."]
+   ],
+   stuck:"Le déploiement échoue le plus souvent sur une bibliothèque oubliée dans requirements.txt : lis les logs, le nom manquant y est écrit.",
+   tip:"Explique-moi étape par étape comment déployer mon bot discord.py sur Railway à partir de mon dépôt GitHub, avec les tokens en variables d'environnement, et comment lire les logs si ça plante."},
   {id:"m28", title:"Jour de match automatique", dur:"45 min",
-   obj:"Le matin d'un match, le bot poste tout seul l'affiche et l'heure.",
-   res:[["Tâches planifiées discord.py (tasks.loop)","https://discordpy.readthedocs.io/en/stable/ext/tasks/index.html"]],
-   acts:[["Une boucle qui vérifie chaque matin s'il y a match",30],["Poster l'affiche dans le salon du groupe",20],["Commit",5]],
-   tip:"Aide-moi à créer une tâche discord.py qui tourne chaque jour à 9h et poste un message si le PSG joue aujourd'hui."},
+   obj:"Le matin d'un match, le bot poste tout seul l'affiche et l'heure dans le salon. Personne ne lui a rien demandé : il est vivant.",
+   words:[["Tâche planifiée","du code qui tourne tout seul à une heure donnée"],["Identifiant de salon","le numéro unique d'un salon Discord, pour que le bot sache où poster"]],
+   res:[["Tâches planifiées dans discord.py (tasks.loop)","https://discordpy.readthedocs.io/en/stable/ext/tasks/index.html"]],
+   acts:[
+    ["Une tâche chaque matin à 9h",30,"Active le mode développeur dans Discord (Paramètres → Avancés) pour copier l'identifiant du salon (clic droit → Copier l'identifiant). Dans bot.py :\n```\nfrom discord.ext import tasks\nimport datetime\n\n@tasks.loop(time=datetime.time(hour=8))  # 8h UTC = 9h Paris en hiver\nasync def match_du_jour():\n    salon = bot.get_channel(ID_DU_SALON)\n    ...  # si le PSG joue aujourd'hui, envoyer l'affiche\n\n@bot.event\nasync def on_ready():\n    match_du_jour.start()\n```"],
+    ["Poster l'affiche",20,"Réutilise `prochain_match()` : si la date du prochain match est aujourd'hui, envoie « Jour de match ! PSG – Lyon ce soir 21h (Ligue 1) ». Pour tester sans attendre 9h, fais une commande `!test_affiche` qui appelle la même fonction."],
+    ["Commit",5,"Commit + push : Railway redéploie."]
+   ],
+   stuck:"Le serveur est à l'heure UTC, pas à l'heure de Paris : 9h chez toi = 8h UTC en hiver, 7h UTC en été.",
+   tip:"Aide-moi à créer une tâche discord.py qui tourne chaque jour à 9h heure de Paris et poste un message dans un salon si le PSG joue aujourd'hui. Explique le décalage UTC."},
   {id:"m29", title:"Livrable : le bot vit dans le groupe", dur:"1 semaine",
-   obj:"Tes potes l'utilisent une semaine entière sans que tu touches à rien.",
-   res:[["En parallèle si tu veux : Advent of Code, un puzzle par jour du 1er au 25 décembre","https://adventofcode.com/"]],
-   acts:[["Inviter le bot dans le vrai serveur des potes",50],["Une semaine sans bug ni intervention",150,"show"]],
-   tip:"Mon bot plante parfois. Explique-moi comment lire les logs sur Railway et ajouter un try/except propre autour des appels API."}
+   obj:"Tes potes utilisent le bot une semaine entière sans que tu touches à rien. C'est le badge qui compte le plus de cette phase.",
+   words:[],
+   res:[["En parallèle, si tu veux un défi quotidien en décembre : Advent of Code (un puzzle par jour du 1er au 25, en anglais mais simple)","https://adventofcode.com/"],["Vidéo : Advent of Code expliqué (français)",YT("advent of code c'est quoi python français")]],
+   acts:[
+    ["Inviter le bot dans le vrai serveur",50,"Refais l'URL d'invitation (module 21) et envoie-la à l'admin du serveur des potes, ou crée un salon « psg-bot » dans votre serveur. Poste une fois la liste des commandes : !prochain, !dernier, !classement, !stats, !resume."],
+    ["Une semaine sans intervention",150,"Pendant 7 jours : tu ne redémarres rien, tu ne corriges rien. Regarde les logs Railway chaque soir, note les bugs dans NOTES.md sans les corriger. À la fin de la semaine, corrige-les tous d'un coup. Badge « Semaine sans toi ».","show"]
+   ],
+   stuck:"Si le bot plante sur une commande, entoure l'appel API d'un `try / except` qui répond « Désolé, l'API ne répond pas » au lieu de planter. Demande à ton IA de t'expliquer try/except.",
+   tip:"Mon bot plante parfois quand l'API ne répond pas. Explique-moi try / except avec un exemple sur mon appel requests, et comment lire les logs sur Railway pour trouver la ligne qui a planté."}
  ]},
- {id:"p3", title:"Pronos & modèle", when:"Février – avril · phases finales de Ligue des Champions", deliverable:"Le classement final de la ligue de pronos", mods:[
+ {id:"p3", title:"Pronos & modèle", when:"Février – avril · phases finales de Ligue des Champions", deliverable:"Le classement final de la ligue de pronos",
+  intro:"Tu lances une ligue de pronostics entre potes, sans argent : l'enjeu, c'est le classement et la fierté. Puis tu construis ton propre modèle de prédiction et tu le fais jouer contre eux. Au passage, tu vas voir avec tes propres chiffres pourquoi les bookmakers gagnent toujours à la fin.",
+  mods:[
   {id:"m31", title:"Une ligue de pronos entre potes", dur:"45 min",
-   obj:"`!prono PSG 2-1` enregistre le prono de chacun. Sans argent : l'enjeu, c'est le classement.",
-   res:[["SQLite en Python (base de données dans un fichier)","https://docs.python.org/fr/3/library/sqlite3.html"]],
-   acts:[["Stocker les pronos dans SQLite (joueur, match, score)",30],["Commande `!prono` et `!mesprono`",25],["Commit",5]],
-   tip:"Aide-moi à créer une table SQLite pour des pronostics et à écrire les commandes Discord pour enregistrer et relire un prono."},
+   obj:"`!prono PSG 2-1` enregistre le prono de chacun. Le bot devient le juge de la ligue.",
+   words:[["Base de données","un fichier organisé pour ranger et retrouver des données (ici les pronos)"],["SQLite","une base de données dans un simple fichier, intégrée à Python"],["Table","un tableau dans la base : une ligne par prono"]],
+   res:[["Vidéo : SQLite avec Python (français)",YT("sqlite python tuto français débutant")],["Doc Python : sqlite3 (en français)","https://docs.python.org/fr/3/library/sqlite3.html"]],
+   acts:[
+    ["Créer la table des pronos",30,"Crée `pronos.py` avec une fonction `init_db()` :\n```\nimport sqlite3\ncon = sqlite3.connect(\"pronos.db\")\ncon.execute(\"\"\"CREATE TABLE IF NOT EXISTS pronos (\n  joueur TEXT, match_id INTEGER, dom INTEGER, ext INTEGER,\n  PRIMARY KEY (joueur, match_id))\"\"\")\ncon.commit()\n```\nLe `PRIMARY KEY` empêche un joueur d'avoir deux pronos pour le même match (le second remplace le premier avec `INSERT OR REPLACE`)."],
+    ["Les commandes !prono et !mesprono",25,"`!prono 2-1` : le bot prend le nom de l'auteur (`ctx.author.name`), le prochain match du PSG (son identifiant via l'API), découpe « 2-1 » en deux nombres, et enregistre. Il répond « Prono enregistré : PSG 2–1 Lyon ». `!mesprono` liste les pronos de l'auteur. Refuse un prono si le match a déjà commencé."],
+    ["Commit",5,"Ajoute `pronos.db` au `.gitignore` (les données ne vont pas sur GitHub). Commit + push. Sur Railway, ajoute un « volume » pour que le fichier survive aux redéploiements (demande à ton IA)."]
+   ],
+   stuck:"« database is locked » : deux commandes écrivent en même temps ; ouvre et ferme la connexion dans chaque fonction au lieu de la garder ouverte.",
+   tip:"Aide-moi à créer une table SQLite pour des pronostics de matchs et à écrire les commandes discord.py !prono et !mesprono. Explique INSERT OR REPLACE et PRIMARY KEY."},
   {id:"m32", title:"Elo : noter les équipes", dur:"45 min",
-   obj:"Chaque équipe a une note qui monte ou descend à chaque match, calculée sur 5 saisons.",
-   res:[["Résultats des saisons passées (CSV)","https://www.football-data.co.uk/francem.php"],["Vidéo : le classement Elo expliqué",YT("classement elo expliqué football")]],
-   acts:[["Coder la formule Elo et la faire tourner sur 5 saisons",35],["Afficher le top 10 Elo actuel",10],["Commit",5]],
-   tip:"Explique-moi le système Elo avec un exemple PSG–Marseille, puis aide-moi à l'implémenter en Python sur un CSV de résultats."},
+   obj:"Chaque équipe a une note qui monte ou descend à chaque match, calculée sur 5 saisons. Ton premier modèle.",
+   words:[["Elo","un système de notes inventé pour les échecs : battre plus fort rapporte beaucoup, battre plus faible rapporte peu"],["Probabilité","une chance entre 0 et 1 (0,7 = 70 %)"],["Modèle","une formule qui transforme des données en prédiction"]],
+   res:[["Résultats des saisons passées (télécharge les 5 derniers F1.csv, renomme-les 2021.csv, 2022.csv…)","https://www.football-data.co.uk/francem.php"],["Vidéo : le classement Elo expliqué (français)",YT("classement elo expliqué simplement")],["Vidéo : Elo appliqué au football",YT("elo rating football python")]],
+   acts:[
+    ["Coder la formule Elo",35,"Crée `elo.py`. Toutes les équipes partent à 1500. Pour chaque match, dans l'ordre des dates :\n```\nattendu_dom = 1 / (1 + 10 ** ((elo[ext] - elo[dom] - 60) / 400))  # +60 : avantage du terrain\nresultat_dom = 1 if bd > be else (0.5 if bd == be else 0)\nK = 20\nelo[dom] += K * (resultat_dom - attendu_dom)\nelo[ext] -= K * (resultat_dom - attendu_dom)\n```\nFais tourner sur les 5 saisons concaténées avec pandas (`pd.concat`), triées par date."],
+    ["Afficher le top 10",10,"Trie `elo` et affiche les 10 premières équipes. Le PSG est-il premier ? De combien devant ? Note le top 3 dans NOTES.md."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"Les dates du CSV sont au format jour/mois/année : `pd.to_datetime(df.Date, dayfirst=True)` avant de trier, sinon l'ordre est faux et les Elo n'ont aucun sens.",
+   tip:"Explique-moi le système Elo avec un exemple PSG–Marseille chiffré, puis aide-moi à l'implémenter en Python sur un DataFrame de 5 saisons de résultats, match par match dans l'ordre des dates."},
   {id:"m33", title:"Poisson : prédire un score", dur:"45 min",
    obj:"Pour chaque match, une probabilité de victoire / nul / défaite et le score le plus probable.",
-   res:[["Vidéo : prédire un match avec la loi de Poisson",YT("poisson football prediction python")]],
-   acts:[["Calculer les buts attendus de chaque équipe (attaque × défense)",30],["Sortir la grille des scores et les probabilités 1-N-2",20],["Commit",5]],
-   tip:"Explique-moi simplement comment on prédit un score de foot avec la loi de Poisson, puis aide-moi à le coder avec scipy."},
+   words:[["Loi de Poisson","une formule qui donne la probabilité de marquer 0, 1, 2, 3… buts quand on connaît la moyenne attendue"],["Force d'attaque / de défense","combien une équipe marque / encaisse par rapport à la moyenne du championnat"]],
+   res:[["Vidéo : prédire un match de foot avec Poisson (français)",YT("prédire match football loi de poisson python")],["Vidéo : la loi de Poisson expliquée (français)",YT("loi de poisson expliquée simplement")]],
+   acts:[
+    ["Les buts attendus de chaque équipe",30,"Sur la saison en cours : moyenne de buts à domicile et à l'extérieur dans tout le championnat. Pour chaque équipe : force d'attaque dom = (buts marqués dom par match) / (moyenne dom), idem défense et extérieur. Buts attendus du PSG à domicile contre Lyon = attaque_dom(PSG) × défense_ext(Lyon) × moyenne_dom. Crée `poisson.py` avec une fonction `attendus(dom, ext)` qui renvoie les deux valeurs."],
+    ["La grille des scores et les probabilités 1-N-2",20,"`pip install scipy`. `from scipy.stats import poisson` : `poisson.pmf(k, mu)` donne la probabilité de k buts quand on attend mu. Construis la grille 0–5 × 0–5 (`p[i][j] = pmf(i, att_dom) * pmf(j, att_ext)`), somme les cases au-dessus / sur / sous la diagonale : victoire, nul, défaite. Le score le plus probable est la case la plus haute. Affiche « PSG–Lyon : 1 : 68 %, N : 19 %, 2 : 13 %, score le plus probable 2–0 »."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"Si tes probabilités ne font pas 100 % à quelques % près, ta grille s'arrête trop tôt (passe à 0–7) ou tu mélanges les forces domicile/extérieur.",
+   tip:"Explique-moi simplement comment on prédit un score de foot avec la loi de Poisson (forces d'attaque et de défense), puis aide-moi à le coder avec scipy.stats.poisson, étape par étape."},
   {id:"m34", title:"Mesurer ton modèle (et le comparer aux bookmakers)", dur:"45 min",
-   obj:"Un chiffre qui dit si ton modèle est bon, et la vérité sur la marge des bookmakers.",
-   res:[["Les cotes sont dans le même CSV (colonnes B365H, B365D, B365A)","https://www.football-data.co.uk/notes.txt"]],
-   acts:[["Calculer le score de Brier de ton modèle sur la saison passée",25],["Convertir les cotes en probabilités et calculer la marge du bookmaker (ça dépasse 100 %)",20],["Comparer : qui prédit le mieux, toi ou eux ? Noter la réponse dans NOTES.md",20]],
-   tip:"Explique-moi le score de Brier, puis comment transformer des cotes 1-N-2 en probabilités et pourquoi leur somme dépasse 100 %."},
+   obj:"Un chiffre qui dit si ton modèle est bon, et la vérité sur la marge des bookmakers, calculée par toi.",
+   words:[["Score de Brier","une note entre 0 (parfait) et 1 (nul) qui mesure la qualité des probabilités prédites"],["Cote","1 / probabilité, avec une marge en plus : une cote de 2,00 veut dire 50 % ; 1,80 veut dire 55,5 %"],["Marge (overround)","la somme des probabilités cachées dans les cotes dépasse 100 % ; l'écart, c'est ce que le bookmaker garde quoi qu'il arrive"]],
+   res:[["Dans F1.csv, les colonnes B365H / B365D / B365A sont les cotes domicile / nul / extérieur de Bet365 (légende des colonnes)","https://www.football-data.co.uk/notes.txt"],["Vidéo : comment les bookmakers gagnent toujours (français)",YT("marge bookmaker comment ils gagnent explication")]],
+   acts:[
+    ["Le score de Brier de ton modèle",25,"Sur la saison passée : pour chaque match, ton modèle donne (p1, pN, p2) ; le résultat réel est (1,0,0), (0,1,0) ou (0,0,1). Brier = moyenne de la somme des (prédit – réel)². Fais-le pour Poisson, pour Elo, et pour un modèle « bête » qui dit toujours 45 / 27 / 28 %. Ton modèle bat-il le modèle bête ? Note les 3 chiffres."],
+    ["La marge du bookmaker",20,"Convertis les cotes en probabilités : 1/B365H, 1/B365D, 1/B365A. Additionne : tu obtiens 1,05 à 1,08, soit 5 à 8 % au-dessus de 100 %. Calcule la marge moyenne sur la saison. Puis divise chaque probabilité par la somme pour avoir les « vraies » probabilités du bookmaker, et calcule son score de Brier."],
+    ["Qui prédit le mieux ?",20,"Compare les 4 scores : bête, Elo, Poisson, bookmaker. Écris dans NOTES.md ce que tu en conclus, en 5 lignes, honnêtement. Deux choses à retenir : le bookmaker est meilleur que toi, et même s'il ne l'était pas, sa marge mange tout sur la durée."]
+   ],
+   stuck:"Si ton Brier est meilleur que celui du bookmaker, cherche l'erreur avant de te réjouir : en général, tu as prédit une saison avec des données qui la contenaient déjà (triche involontaire).",
+   tip:"Explique-moi le score de Brier avec un exemple sur 3 matchs, puis comment transformer des cotes 1-N-2 en probabilités, pourquoi leur somme dépasse 100 %, et ce que ça implique pour quelqu'un qui parie sur la durée."},
   {id:"m35", title:"Le modèle joue dans la ligue", dur:"30 min",
-   obj:"Le bot a son propre compte dans la ligue de pronos : « Le Modèle ».",
+   obj:"Le bot a son propre compte dans la ligue de pronos : « Le Modèle ». Tes potes jouent contre une machine.",
+   words:[],
    res:[],
-   acts:[["Le bot enregistre automatiquement le prono du modèle avant chaque match",30],["Commit",5]],
-   tip:"Aide-moi à faire en sorte que mon bot insère le prono du modèle dans la table SQLite la veille de chaque match."},
+   acts:[
+    ["Le prono automatique",30,"Dans la tâche du matin (module 28) : si match aujourd'hui, le bot calcule le score le plus probable avec `poisson.py` et l'enregistre dans la table sous le nom « Le Modèle ». Il poste : « Le Modèle a parié PSG 2–0. Qui fait mieux ? »."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"Si le modèle parie toujours 1–0 ou 2–0, c'est normal : le score le plus probable est souvent le plus prudent. Tu peux lui faire parier le score au « meilleur gain » selon ton barème (module 36).",
+   tip:"Aide-moi à faire en sorte que mon bot calcule le prono du modèle Poisson la veille de chaque match et l'insère dans la table SQLite sous le nom « Le Modèle »."},
   {id:"m36", title:"Tableau des scores", dur:"45 min",
-   obj:"`!classement-pronos` met à jour les points après chaque match.",
+   obj:"`!classement-pronos` met à jour les points après chaque match. La ligue a un classement, donc elle existe.",
+   words:[["Barème","la règle des points : score exact, bon résultat, raté"]],
    res:[],
-   acts:[["Règle de points (score exact, bon résultat, raté)",15],["Commande `!classement-pronos`",25],["Commit",5]],
-   tip:"Propose-moi 3 barèmes de points pour une ligue de pronos entre potes et leurs avantages, puis aide-moi à coder celui que je choisis."},
+   acts:[
+    ["Choisir le barème",15,"Proposé : score exact 3 points, bon vainqueur ou nul 1 point, raté 0. Fais voter le groupe. Écris la règle dans un fichier `REGLES.md` que le bot peut afficher avec `!regles`."],
+    ["La commande !classement-pronos",25,"Pour chaque prono dont le match est terminé (résultat via l'API, module 24), calcule les points. Somme par joueur, trie, affiche en bloc de code : rang, joueur, points, nombre de scores exacts. « Le Modèle » apparaît comme un joueur."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"Garde les résultats des matchs terminés dans la base (table `matchs`) pour ne pas rappeler l'API à chaque `!classement-pronos`.",
+   tip:"Propose-moi 3 barèmes de points pour une ligue de pronos entre potes avec leurs avantages, puis aide-moi à coder le calcul du classement en SQL ou en pandas à partir de ma table SQLite."},
   {id:"m37", title:"Livrable : classement final", dur:"après la finale",
-   obj:"La ligue a tourné sur toutes les phases finales. Qui a battu le modèle ?",
+   obj:"La ligue a tourné sur toute la Ligue des Champions. Qui a battu le modèle ? Qui a battu le bookmaker ?",
+   words:[],
    res:[],
-   acts:[["Faire tourner la ligue sur toute la Ligue des Champions",50],["Poster le classement final et une phrase sur ce que le modèle t'a appris",150,"show"]],
-   tip:"Résume en 5 lignes, pour mes potes, ce que mon modèle a appris sur la prédiction des matchs et sur les cotes des bookmakers."}
+   acts:[
+    ["Faire tourner la ligue sur toute la C1",50,"Élargis les pronos à tous les matchs de phase finale (pas seulement le PSG) : l'API donne la compétition CL. Le bot poste les affiches de la soirée, enregistre les pronos, met à jour le classement le lendemain matin."],
+    ["Poster le classement final et ce que tu en retiens",150,"Après la finale : classement final en image (plotly, barres horizontales), posté dans le groupe, avec 3 phrases : qui a gagné, où a fini Le Modèle, et ce que tu as appris sur les cotes. Badge « Finale ».","show"]
+   ],
+   stuck:"",
+   tip:"Résume en 5 lignes, pour mes potes, ce que mon modèle m'a appris sur la prédiction des matchs et sur les cotes des bookmakers, à partir de ces chiffres : [colle tes scores de Brier et la marge]."}
  ]},
- {id:"p4", title:"L'appli mobile", when:"Avril – juin", deliverable:"L'appli installée sur les téléphones des potes", mods:[
+ {id:"p4", title:"L'appli mobile", when:"Avril – juin", deliverable:"L'appli installée sur les téléphones des potes",
+  intro:"Tout ce que ton bot sait faire, dans une appli sur ton téléphone. Flutter permet de faire une appli Android (et iPhone) avec un seul code. Tu repars presque de zéro sur le langage (Dart), mais tu sais maintenant lire du code, utiliser une API et chercher une erreur : c'est 80 % du travail.",
+  mods:[
   {id:"m41", title:"Installer Flutter", dur:"45 min",
-   obj:"Flutter et Android Studio marchent sur ton PC.",
-   res:[["Installer Flutter sur Windows","https://docs.flutter.dev/get-started/install/windows"],["Vidéo : Flutter débutant",YT("flutter débutant tutoriel français")]],
-   acts:[["Installer Flutter + Android Studio",30],["`flutter doctor` tout vert",15]],
-   tip:"Je suis sur Windows. Explique-moi les étapes pour installer Flutter et ce que vérifie flutter doctor."},
+   obj:"Flutter et Android Studio marchent sur ton PC et `flutter doctor` est tout vert.",
+   words:[["Flutter","l'outil pour faire des applis mobiles"],["Dart","le langage de Flutter, proche de Python/JavaScript"],["Android Studio","le logiciel qui fournit les outils Android (et un téléphone virtuel)"],["flutter doctor","la commande qui vérifie que tout est installé"]],
+   res:[["Installer Flutter sur Windows (doc officielle)","https://docs.flutter.dev/get-started/install/windows"],["Vidéo : installer Flutter sur Windows (français)",YT("installer flutter windows 2026 tuto français")],["Vidéo : apprendre Flutter de zéro (français)",YT("flutter débutant cours complet français")]],
+   acts:[
+    ["Installer Flutter et Android Studio",30,"Suis la doc officielle dans l'ordre : Android Studio d'abord (avec « Android SDK » et « Android Virtual Device » cochés), puis le SDK Flutter (dézippé dans `C:\\dev\\flutter`, ajouté au PATH comme pour Python). Compte 20 à 30 minutes de téléchargements."],
+    ["flutter doctor tout vert",15,"Dans PowerShell : `flutter doctor`. Chaque ligne doit avoir une coche. Les classiques en rouge : « Android licenses » → tape `flutter doctor --android-licenses` et accepte tout ; « Visual Studio » → ignore, c'est pour les applis Windows, pas Android."]
+   ],
+   stuck:"Si `flutter` n'est pas reconnu : PATH oublié, même histoire qu'avec Python. Ferme et rouvre PowerShell après avoir modifié le PATH.",
+   tip:"Je suis sur Windows. Explique-moi les étapes pour installer Flutter et Android Studio, ce que vérifie chaque ligne de flutter doctor, et comment corriger les erreurs les plus fréquentes."},
   {id:"m42", title:"Hello world sur ton téléphone", dur:"45 min",
-   obj:"Une appli à toi tourne sur ton vrai téléphone.",
-   res:[["Mode développeur Android et débogage USB","https://developer.android.com/studio/debug/dev-options"]],
-   acts:[["Activer le mode développeur sur ton téléphone",10],["Lancer l'appli de démo Flutter dessus",25],["Changer le titre en « PSG Lab » et commit",10]],
-   tip:"Aide-moi à comprendre la structure d'une appli Flutter de base : main.dart, widgets, hot reload."},
+   obj:"Une appli à toi tourne sur ton vrai téléphone Android. Pas sur un simulateur : sur le tien.",
+   words:[["Mode développeur","un réglage caché d'Android qui autorise l'installation d'applis depuis ton PC"],["Hot reload","Flutter met à jour l'appli sur le téléphone à chaque enregistrement du fichier, sans la relancer"],["Widget","une brique d'interface Flutter (un texte, un bouton, une liste) ; une appli est un emboîtement de widgets"]],
+   res:[["Activer le mode développeur sur Android (doc officielle, en français)","https://developer.android.com/studio/debug/dev-options?hl=fr"],["Vidéo : première appli Flutter (français)",YT("première application flutter tuto français")]],
+   acts:[
+    ["Activer le mode développeur",10,"Sur ton téléphone : Paramètres → À propos du téléphone → tape 7 fois sur « Numéro de build ». Puis Paramètres → Options pour les développeurs → active « Débogage USB ». Branche le téléphone en USB, accepte la fenêtre « Autoriser le débogage USB »."],
+    ["Lancer l'appli de démo",25,"`flutter create psg_app` puis `cd psg_app` puis `flutter devices` (ton téléphone doit apparaître) puis `flutter run`. La première compilation prend plusieurs minutes. L'appli compteur de Flutter s'ouvre sur ton téléphone."],
+    ["Changer le titre et commiter",10,"Ouvre `lib/main.dart` dans VS Code (installe l'extension Flutter). Remplace le titre « Flutter Demo Home Page » par « PSG Lab », enregistre : l'appli se met à jour instantanément sur le téléphone (hot reload). Crée un dépôt GitHub `psg-app` et pousse."]
+   ],
+   stuck:"Téléphone absent de `flutter devices` : câble de charge seule (sans données) ou autorisation USB refusée ; change de câble et re-branche.",
+   tip:"Explique-moi la structure d'une appli Flutter de base (main.dart, MaterialApp, Scaffold, StatefulWidget) avec des mots simples, et ce que fait le hot reload."},
   {id:"m43", title:"Écran « prochain match »", dur:"45 min",
-   obj:"L'appli appelle la même API que ton bot et affiche le prochain match.",
-   res:[["Appeler une API en Flutter","https://docs.flutter.dev/cookbook/networking/fetch-data"]],
-   acts:[["Appel API et affichage dans une carte",30],["Un bouton « actualiser »",10],["Commit",5]],
-   tip:"Montre-moi comment appeler football-data.org depuis Flutter avec le package http et afficher le résultat dans un widget Card."},
+   obj:"L'appli appelle la même API que ton bot et affiche le prochain match dans une carte.",
+   words:[["Package","une bibliothèque Flutter (comme pip pour Python) ; le package `http` sert à appeler une API"],["Asynchrone (async/await)","même idée qu'avec le bot : attendre la réponse sans figer l'écran"]],
+   res:[["Flutter : récupérer des données depuis internet (doc officielle, en français)","https://docs.flutter.dev/cookbook/networking/fetch-data"],["Vidéo : appeler une API en Flutter (français)",YT("flutter api http tuto français")]],
+   acts:[
+    ["Appel API et affichage dans une carte",30,"`flutter pub add http`. Écris une fonction `Future<Map> prochainMatch()` qui appelle l'URL du module 23 avec l'en-tête X-Auth-Token et renvoie le JSON. Affiche adversaire, date et compétition dans un widget `Card` grâce à un `FutureBuilder`. Attention : la clé API est dans le code de l'appli, donc visible par qui installe l'APK ; pour ce projet perso c'est acceptable, mais note-le dans NOTES.md (on corrigera au module 45)."],
+    ["Un bouton « actualiser »",10,"Un `FloatingActionButton` qui relance l'appel (appelle `setState`). Teste en coupant le wifi : l'appli doit afficher « Pas de connexion » au lieu de planter."],
+    ["Commit",5,"Commit + push sur psg-app."]
+   ],
+   stuck:"Erreur « Cleartext HTTP not permitted » : l'URL doit être en https. « SocketException » : pas de réseau, ou la permission internet manque dans AndroidManifest (ajoute `<uses-permission android:name=\"android.permission.INTERNET\"/>`).",
+   tip:"Montre-moi comment appeler football-data.org depuis Flutter avec le package http et afficher le résultat dans un Card via un FutureBuilder, avec un message propre en cas d'erreur réseau."},
   {id:"m44", title:"Écran stats avec graphique", dur:"2 séances",
-   obj:"La courbe des points du PSG, sur ton téléphone.",
-   res:[["fl_chart (graphiques Flutter)","https://pub.dev/packages/fl_chart"]],
-   acts:[["Charger le classement et la courbe depuis un petit fichier JSON généré par ton code Python",30],["Graphique fl_chart",40],["Commit",5]],
-   tip:"Aide-moi à tracer une courbe de points cumulés par journée avec fl_chart à partir d'un JSON."},
+   obj:"La courbe des points du PSG, sur ton téléphone, dans un vrai graphique tactile.",
+   words:[["fl_chart","le package de graphiques le plus utilisé en Flutter"],["JSON généré","un petit fichier de données que ton code Python fabrique pour que l'appli n'ait plus qu'à l'afficher"]],
+   res:[["fl_chart (exemples de courbes)","https://pub.dev/packages/fl_chart"],["Vidéo : graphiques fl_chart (français)",YT("fl_chart flutter tuto français")]],
+   acts:[
+    ["Le fichier de données côté Python",30,"Dans psg-lab, un script `export_json.py` qui calcule classement + points cumulés (modules 12–13) et écrit `donnees.json`. Fais-le publier par ton bot sur Railway à une URL simple (une mini page web avec Flask, ou un fichier posté sur GitHub par le script). L'appli lira ce fichier."],
+    ["Le graphique fl_chart",40,"`flutter pub add fl_chart`. Charge `donnees.json`, transforme la liste de points en `FlSpot(journee, points)`, affiche un `LineChart` avec les 3 équipes. Onglets en bas de l'appli (`BottomNavigationBar`) : Prochain match / Classement / Courbe."],
+    ["Commit",5,"Commit + push."]
+   ],
+   stuck:"fl_chart demande des nombres `double` : convertis tes entiers avec `.toDouble()`.",
+   tip:"Aide-moi à afficher une courbe de points cumulés par journée pour 3 équipes avec fl_chart, à partir d'un JSON que je télécharge, dans une appli Flutter avec BottomNavigationBar."},
   {id:"m45", title:"Écran pronos relié au bot", dur:"2 séances",
-   obj:"Tu fais ton prono depuis l'appli, le bot le voit.",
-   res:[["FastAPI : une petite API en Python pour ton bot","https://fastapi.tiangolo.com/fr/"]],
-   acts:[["Exposer les pronos et le classement via une mini API FastAPI à côté du bot",40],["Écran pronos dans l'appli (lire + envoyer)",40],["Commit",5]],
-   tip:"Explique-moi comment faire dialoguer une appli Flutter et mon bot Python via une petite API FastAPI, avec 2 routes : GET classement, POST prono."},
+   obj:"Tu fais ton prono depuis l'appli, le bot le voit. Appli et bot parlent enfin ensemble.",
+   words:[["FastAPI","une bibliothèque Python pour créer ta propre petite API"],["Route","une adresse de ton API : GET /classement renvoie le classement, POST /prono enregistre un prono"],["Backend","la partie de ton projet qui tourne sur le serveur (bot + API) ; l'appli est le « frontend »"]],
+   res:[["FastAPI : premiers pas (doc officielle en français)","https://fastapi.tiangolo.com/fr/tutorial/first-steps/"],["Vidéo : FastAPI débutant (français)",YT("fastapi tuto français débutant")]],
+   acts:[
+    ["Une mini API à côté du bot",40,"Dans psg-lab, `api.py` avec FastAPI : route `GET /classement-pronos` qui lit pronos.db et renvoie le classement en JSON ; route `POST /prono` qui reçoit joueur + score et l'enregistre (même fonction que le bot). Lance-la sur Railway comme second service (`web: uvicorn api:app --host 0.0.0.0 --port $PORT`). Ajoute une clé secrète simple dans l'en-tête pour que seuls tes potes puissent poster (demande à ton IA)."],
+    ["L'écran pronos dans l'appli",40,"Nouvel onglet « Pronos » : la liste du classement (GET) et un petit formulaire score domicile / extérieur + bouton « Valider » (POST). Après validation, recharge le classement. Au passage, déplace la clé football-data côté API : l'appli ne l'a plus en dur (module 43)."],
+    ["Commit",5,"Commit + push des deux dépôts."]
+   ],
+   stuck:"Si l'appli reçoit une erreur CORS ou 403, c'est l'en-tête secret ou l'URL (http vs https) : teste d'abord ta route dans le navigateur ou avec `curl`.",
+   tip:"Explique-moi comment faire dialoguer une appli Flutter et mon bot Python via une petite API FastAPI, avec 2 routes (GET classement, POST prono) et une clé simple dans l'en-tête. Étape par étape."},
   {id:"m46", title:"Livrable : l'APK sur les téléphones des potes", dur:"45 min",
-   obj:"Un fichier à installer, envoyé dans le groupe.",
-   res:[["Construire un APK Android","https://docs.flutter.dev/deployment/android"]],
-   acts:[["`flutter build apk` et test sur ton téléphone",30],["Envoyer l'APK aux potes et récolter 3 retours",120,"show"]],
-   tip:"Mon APK Flutter ne s'installe pas chez un pote. Quelles sont les causes classiques et comment les vérifier ?"},
+   obj:"Un fichier à installer, envoyé dans le groupe. Ton appli, sur leurs téléphones.",
+   words:[["APK","le fichier d'installation d'une appli Android, comme un .exe sur PC"],["Signature","une empreinte qui prouve que c'est bien toi qui as fait l'appli"]],
+   res:[["Construire et signer un APK (doc officielle)","https://docs.flutter.dev/deployment/android"],["Vidéo : générer un APK Flutter (français)",YT("flutter build apk tuto français")]],
+   acts:[
+    ["Construire et tester l'APK",30,"`flutter build apk --release`. Le fichier est dans `build/app/outputs/flutter-apk/app-release.apk`. Désinstalle la version de test sur ton téléphone, copie l'APK dessus (câble ou Drive), installe-le (Android demande d'autoriser « sources inconnues » : accepte). Vérifie que tout marche hors de VS Code."],
+    ["L'envoyer aux potes et récolter 3 retours",120,"Envoie l'APK dans le groupe avec 3 lignes : ce que ça fait, comment l'installer, et « dites-moi ce qui bug ». Note les 3 premiers retours dans NOTES.md. Badge « Sur les téléphones ».","show"]
+   ],
+   stuck:"Un pote sur iPhone ne peut pas installer un APK : c'est normal, iOS demande un Mac et un compte Apple payant. Dis-le-lui franchement.",
+   tip:"Mon APK Flutter ne s'installe pas chez un pote (message : [colle]). Quelles sont les causes classiques et comment les vérifier une par une ?"},
   {id:"m47", title:"Bonus : publier sur le Play Store", dur:"2 séances",
    obj:"Ton appli dans le store, avec ton nom dessus. Ligne de CV garantie.",
-   res:[["Google Play Console (compte développeur payant, une fois)","https://play.google.com/console/"]],
-   acts:[["Créer le compte développeur et préparer fiche + captures",40],["Soumettre l'appli et attendre la validation",150,"show"]],
-   tip:"Fais-moi la liste de ce que Google Play demande pour publier une appli : fiche, captures, politique de confidentialité, signature."}
+   words:[["Google Play Console","le site où l'on publie des applis Android (compte développeur payant, une seule fois, ~25 $)"],["Politique de confidentialité","une page obligatoire qui dit quelles données l'appli collecte (ici : aucune, ou presque)"]],
+   res:[["Google Play Console","https://play.google.com/console/"],["Vidéo : publier une appli Flutter sur le Play Store (français)",YT("publier application flutter play store tuto français")]],
+   acts:[
+    ["Préparer la fiche",40,"Compte développeur Play Console. Prépare : nom (« PSG Lab » — évite le logo et les marques du club, c'est un projet non officiel), icône 512×512, 4 captures d'écran, un texte de 2 lignes, une page de politique de confidentialité (une page GitHub suffit). Génère un « app bundle » signé : `flutter build appbundle` (la doc du module 46 explique la clé de signature)."],
+    ["Soumettre et attendre",150,"Crée l'appli dans la console, remplis le questionnaire (contenu, public visé, données), envoie l'app bundle en « test interne » d'abord, puis en production. La validation prend de quelques heures à quelques jours. Quand c'est en ligne : lien dans le groupe, et sur ton CV. Badge « Publié ».","show"]
+   ],
+   stuck:"Les refus Google viennent presque toujours de la politique de confidentialité manquante ou d'un nom qui utilise une marque : reste sur « PSG Lab », projet de fan, non officiel.",
+   tip:"Fais-moi la liste de tout ce que Google Play demande pour publier une appli (fiche, captures, politique de confidentialité, signature, questionnaire), dans l'ordre, et aide-moi à rédiger une politique de confidentialité pour une appli qui ne collecte rien."}
  ]}
 ];
 
@@ -382,7 +608,7 @@ function load(){ try{ const raw=localStorage.getItem(KEY); if(raw){ const s=JSON
 function normalize(s){ return {done:s.done||{}, days:s.days||[], bestStreak:s.bestStreak||0}; }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
-const allActs = []; PHASES.forEach(p=>p.mods.forEach(m=>m.acts.forEach((a,i)=>allActs.push({id:m.id+"-"+i, xp:a[1], mod:m, phase:p, show:a[2]==="show"}))));
+const allActs = []; PHASES.forEach(p=>p.mods.forEach(m=>m.acts.forEach((a,i)=>allActs.push({id:m.id+"-"+i, xp:a[1], mod:m, phase:p, show:a[3]==="show"}))));
 const TOTAL_XP = allActs.reduce((t,a)=>t+a.xp,0);
 function xpOf(s){ return allActs.reduce((t,a)=>t+(s.done[a.id]?a.xp:0),0); }
 function isDone(s,mid){ return allActs.filter(a=>a.mod.id===mid).every(a=>s.done[a.id]); }
@@ -395,6 +621,7 @@ function nextAction(){ return allActs.find(a=>!state.done[a.id]) || null; }
 
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function md(s){ return esc(s).replace(/`([^`]+)`/g,"<code>$1</code>"); }
+function rich(s){ const parts=String(s).split("```"); return parts.map((t,i)=> i%2 ? `<pre><code>${esc(t.replace(/^\n|\n$/g,""))}</code></pre>` : md(t).trim().split("\n").filter(Boolean).map(l=>`<p>${l}</p>`).join("")).join(""); }
 
 function renderPhases(){
   const host=document.getElementById("phases"); host.innerHTML="";
@@ -402,16 +629,18 @@ function renderPhases(){
     const acts=allActs.filter(a=>a.phase.id===p.id); const d=acts.filter(a=>state.done[a.id]).length;
     const sec=document.createElement("section"); sec.className="phase"; sec.id=p.id;
     sec.innerHTML=`<div class="phead"><div class="pnum">${pi}</div><div><h2>${esc(p.title)}</h2><div class="when">${esc(p.when)}</div></div><div class="pprog">${d} / ${acts.length}</div></div>
-    <p class="pdeliv">Livrable de la phase : <b>${esc(p.deliverable)}</b></p><div class="mods"></div>`;
+    ${p.intro?`<p class="pintro">${esc(p.intro)}</p>`:""}<p class="pdeliv">Livrable de la phase : <b>${esc(p.deliverable)}</b></p><div class="mods"></div>`;
     const mods=sec.querySelector(".mods");
     p.mods.forEach(m=>{
       const st=modStatus(m); const mxp=allActs.filter(a=>a.mod.id===m.id).reduce((t,a)=>t+a.xp,0);
       const det=document.createElement("details"); det.className="mod"; det.id="mod-"+m.id;
       det.innerHTML=`<summary class="mhead"><span class="dot ${st}"></span><span class="mtitle"><b>${esc(m.title)}</b><span>${esc(m.dur)}</span></span><span class="mxp">${mxp} XP</span></summary>
       <div class="mbody">
-        <p>${esc(m.obj)}</p>
+        <p class="obj">${esc(m.obj)}</p>
+        ${m.words&&m.words.length?`<div class="words"><h4>Vocabulaire</h4><dl>${m.words.map(w=>`<div><dt>${esc(w[0])}</dt><dd>${esc(w[1])}</dd></div>`).join("")}</dl></div>`:""}
         ${m.res.length?`<div><h4>Ressources</h4><ul class="res">${m.res.map(r=>`<li><a href="${esc(r[1])}" target="_blank" rel="noopener">${esc(r[0])}</a></li>`).join("")}</ul></div>`:""}
-        <div><h4>Actions</h4><div class="acts">${m.acts.map((a,i)=>{const id=m.id+"-"+i; const dn=!!state.done[id]; return `<label class="act ${dn?"done":""} ${a[2]==="show"?"show":""}"><input type="checkbox" id="chk-${id}" data-id="${id}" ${dn?"checked":""}><span>${md(a[0])}</span><span class="axp">+${a[1]}</span></label>`;}).join("")}</div></div>
+        <div><h4>Pas à pas</h4><div class="acts">${m.acts.map((a,i)=>{const id=m.id+"-"+i; const dn=!!state.done[id]; const show=a[3]==="show"; return `<div class="act ${dn?"done":""} ${show?"show":""}"><label class="arow"><input type="checkbox" id="chk-${id}" data-id="${id}" ${dn?"checked":""}><b>${md(a[0])}</b><span class="axp">+${a[1]}</span></label>${a[2]?`<div class="how">${rich(a[2])}</div>`:""}</div>`;}).join("")}</div></div>
+        ${m.stuck?`<div class="stuck"><h4>Si ça coince</h4><p>${md(m.stuck)}</p></div>`:""}
         <div class="tip"><h4>Coup de pouce : à coller dans ton assistant IA</h4><code>${esc(m.tip)}</code><button type="button" class="copy" data-copy="${esc(m.tip)}">Copier</button></div>
       </div>`;
       mods.appendChild(det);
